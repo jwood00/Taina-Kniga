@@ -1,0 +1,16 @@
+FTP SCRIPTS
+To add users to the FTP user list
+#!/bin/bash
+for user in $(cat /etc/vsftpd.userlist); do
+  sudo mkdir -p /srv/ftp/$user
+  sudo chown $user:$user /srv/ftp/$user
+  sudo chmod 755 /srv/ftp/$user
+done
+
+
+to add everyone in the FTP users list to the FTP group
+#!/bin/bash
+#sudo groupadd FTP
+for user in $(cat /etc/vsftpd.userlist); do
+  sudo usermod -aG FTP $user
+done

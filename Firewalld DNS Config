@@ -1,0 +1,27 @@
+//For Rocky Linux
+//check /etc/yum.conf for any excludes that may prevent the installation of firewalld 
+
+sudo yum install firewalld
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+
+//To Check Zones
+sudo firewall-cmd --get-zones
+
+//To check rules
+sudo firewall-cmd --list-all
+
+//to check active zones
+sudo firewall-cmd --get-active-zones
+
+//Configuring firewalld to exclude everything except for DNS on port 53
+sudo firewall-cmd --permanent --new-zone=dnszone
+sudo firewall-cmd --set-default-zone=dnszone
+sudo firewall-cmd --get-default-zone
+
+sudo firewall-cmd --zone=dnszone --permanent --set-target=DROP
+sudo firewall-cmd --zone=dnszone --permanent --add-interface=ens18
+sudo firewall-cmd --zone=dnszone --permanent --add-source=192.168.0.0/24
+sudo firewall-cmd --zone=dnszone --permanent --add-service=dns
+
+sudo firewall-cmd --reload

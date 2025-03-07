@@ -1,0 +1,111 @@
+/etc/named.conf
+  //add these lines to options
+  options {
+    listen-on port 53 { 127.0.0.1; internal-zone; };
+    allow-query { any; };
+    recursion yes;
+    allow-recursion { internal-zone; };
+    allow-transfer { none; };
+  }
+
+  //Access Control Lists
+  acl "internal-network" {
+    192.168.10X.0/24;
+  }
+  acl "external-network" {
+    172.18.0.0/16;
+  }
+  
+  //Internal Zones
+  zone "team5.net" {
+      type master;
+      file "/var/named/team5.net.zone";
+      allow-update { none; };
+  };
+  zone "105.168.192.in-addr.arpa" {
+      type master;
+      file "/var/named/105.168.192.in-addr.arpa.zone";
+      allow-update { none; };
+  };
+
+  //External Zones
+  zone "teamX.cyberjousting.org" {
+      type master;
+      file "/var/named/cyberjousting.org.zone";
+      allow-update { none; };
+  };
+  zone "105.18.172.in-addr.arpa" {
+      type master;
+      file "/var/named/105.18.172.in-addr.arpa.zone";
+      allow-update { none; };
+  };
+
+
+
+Internal DNS Forward Record Example:
+/var/named/name.of.your.forward.area.zone (ex: teamX.net.zone)
+  $TTL 86400
+  @   IN  SOA ns1.team5.net. admin.team5.net. (
+              2025030101  ; Serial
+              3600        ; Refresh
+              1800        ; Retry
+              1209600     ; Expire
+              86400       ; Minimum TTL
+          )
+      IN  NS  ns1.team5.net.
+      IN  A   192.168.105.2
+
+  ns1 IN  A   192.168.105.2
+  www IN  A   192.168.105.3
+  db  IN  A   192.168.105.4
+
+Internal DNS Reverse Record Example:
+/var/named/reverse.ip.of.area.zone (ex: 10X.168.192.in-addr.arpa.zone)
+  $TTL 86400
+  @   IN  SOA ns1.team5.net. admin.team5.net. (
+              2025030101  ; Serial
+              3600        ; Refresh
+              1800        ; Retry
+              1209600     ; Expire
+              86400       ; Minimum TTL
+          )
+      IN  NS  ns1.team5.net.
+  
+  2   IN  PTR ns1.team5.net.
+  3   IN  PTR www.team5.net.
+  4   IN  PTR db.team5.net.
+
+External DNS Forward Record Example:
+/var/named/name.of.your.forward.area.zone (ex: teamX.cyberjousting.org.zone)
+  $TTL 86400
+  @   IN  SOA ns1.team5.cyberjousting.org. admin.cyberjousting.org. (
+              2025030101  ; Serial
+              3600        ; Refresh
+              1800        ; Retry
+              1209600     ; Expire
+              86400       ; Minimum TTL
+          )
+      IN  NS  ns1.team5.cyberjousting.org.
+      IN  A   172.18.105.1
+  
+  ns1    IN  A 172.18.105.1
+  www    IN  A 172.18.105.1
+  shell  IN  A 172.18.105.2
+  files  IN  A 172.18.105.2
+
+External DNS Reverse Record Example:
+/var/named/name.of.your.reverse.area.zone (ex: 105.18.172.in-addr.arpa.zone)
+  $TTL 86400
+  @   IN  SOA ns1.team5.cyberjousting.org. admin.cyberjousting.org. (
+              2025030101  ; Serial
+              3600        ; Refresh
+              1800        ; Retry
+              1209600     ; Expire
+              86400       ; Minimum TTL
+          )
+      IN  NS  ns1.team5.cyberjousting.org.
+  
+  1   IN  PTR ns1.team5.cyberjousting.org.
+  1   IN  PTR www.team5.cyberjousting.org.
+  2   IN  PTR shell.team5.cyberjousting.org.
+  2   IN  PTR files.team5.cyberjousting.org.

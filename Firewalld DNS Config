@@ -24,4 +24,8 @@ sudo firewall-cmd --zone=dnszone --permanent --add-interface=ens18
 sudo firewall-cmd --zone=dnszone --permanent --add-source=192.168.0.0/24
 sudo firewall-cmd --zone=dnszone --permanent --add-service=dns
 
+//To explicitely DROP outgoing traffic with firewalld you must use a direct rule to directly manage iptables
+//This can be done as follows: (this will only allow outgoing DNS for outbound traffic, no other service)
+
+
 sudo firewall-cmd --reload

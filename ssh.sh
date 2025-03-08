@@ -25,7 +25,7 @@ edit_sshd_config() {
 # Function to add SSH keys to users
 add_ssh_keys() {
   # Print the current date/time at the start of the script
-  echo "- Execution: $(date)" >> /var/log/ssh_script.log
+  echo "- Execution: $(date)" >> /tmp/ssh_script.log
 
   # Path to the file containing usernames (one per line)
   # USER_LIST=$2
@@ -64,7 +64,7 @@ add_ssh_keys() {
       echo "Added SSH key for $user"
     else
       echo "User $user does not exist"
-      echo "User $user does not exist" >> /var/log/ssh_script.log
+      echo "User $user does not exist" >> /tmp/ssh_script.log
     fi
   done
   # done < "$USER_LIST"
@@ -80,7 +80,7 @@ change_passwords() {
       echo "Password changed for $user"
     else
       echo "User $user does not exist"
-      echo "User $user does not exist" >> /var/log/ssh_script.log
+      echo "User $user does not exist" >> /tmp/ssh_script.log
     fi
   done
 }
@@ -140,7 +140,7 @@ elif [[ $1 == "a" ]]; then
   add_ssh_keys $users $key
   restart_ssh
 elif [[ $1 == "l" ]]; then
-  cat /var/log/ssh_script.log
+  cat /tmp/ssh_script.log
 else
   # echo "Usage: $0 {i|w|key|restart} [user_list] [ssh_key]"
   echo "Usage: $0 {option}"
@@ -148,7 +148,7 @@ else
   echo "  i     Make sshd_config immutable"
   echo "  w     Write/remove immutable attribute from sshd_config"
   echo "  e     Edit sshd_config"
-  echo "  key   Add SSH keys to users" 
+  echo "  key   Add SSH keys to users"
   echo "  r     Restart SSH service"
   echo "  a     Run i, key, r"
   echo "  l     Show log"

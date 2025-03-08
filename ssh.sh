@@ -55,7 +55,7 @@ add_ssh_keys() {
       sudo chmod 700 "$USER_HOME/.ssh"
   
       # Add the key to authorized_keys
-      echo "$key" > $AUTH_KEYS
+      echo "$key" | sudo tee $AUTH_KEYS > /dev/null
   
       # Set proper permissions
       sudo chmod 600 $AUTH_KEYS

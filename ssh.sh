@@ -133,7 +133,7 @@ elif [[ $1 == "key" ]]; then
   add_ssh_keys $users $key
 elif [[ $1 == "p" ]]; then
   change_passwords
-elif [[ $1 == "r"]]; then
+elif [[ $1 == "r" ]]; then
   restart_ssh
 elif [[ $1 == "a" ]]; then
   make_immutable
